@@ -1,2 +1,9 @@
-# ForumProject
-小组合作
+# ForumProject小组合作
+##	front
+*	前段代码
+## end
+*	后端代码
+## ForumProject-main
+*	主项目地址
+## 成员文件夹
+*	最好创立个人文件夹然后合并代码
