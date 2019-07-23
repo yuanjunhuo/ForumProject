@@ -80,24 +80,31 @@ export default {
     sendCode(){
       this.code = Math.random().toString(10).slice(2,6)
       console.log(this.user)
-
-      alert("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")
+     console.log("发送验证码")
+      // alert("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")
     // 这里验证验证码，如果成功再进行post
-     axios.post("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")//axios请求数据
-      // .then(function(data){
-      //   // return data.data;//axios返回的。
-      //   //   return data.json();//vue-resourse请求才用。
-      //     console.log(data)
-      //   // this.blogs=data.body.slice(0,10)
-      //   // console.log(this.blogs)
-      // })  //无需返回数据
+
+    //  axios.post("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")//axios请求数据
+    //   // .then(function(data){
+    //   //   // return data.data;//axios返回的。
+    //   //   //   return data.json();//vue-resourse请求才用。
+    //   //     console.log(data)
+    //   //   // this.blogs=data.body.slice(0,10)
+    //   //   // console.log(this.blogs)
+    //   // })  //无需返回数据
     },
     identify(){
-     
+      //验证码正确之后才能post（），inputCode==code时
+     this.post();
     },
     post(){
+      console.log("加密成功")
       this.user.password = md5(this.password1);
       console.log(this.user)
+       axios.post("http://jsonplaceholder.typicode.com/posts",this.user).then(function(data){//这里的地址是第三方测试地址。不能真实写入，但是有响应
+        console.log("post成功")
+        console.log(data)
+      })
     }
   }
 }
