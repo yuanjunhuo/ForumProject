@@ -3,7 +3,7 @@
 
         <!-- 下面是logo -->
         <router-link to="/about" tag="div">
-            <div class="logo">
+            <div class="logo" data-toggle="modal" data-target="#myModal">
                 Hello Daily
             </div>
         </router-link>
@@ -29,10 +29,12 @@ export default {
 }
 </script>
 <style scoped>
-
+.RightMy{
+    margin:5px auto;
+}
 .logo{
     margin: 20px auto;
-    font-size: 40px;
+    font-size: 36px;
     color: lightseagreen;
     cursor: pointer;
 }

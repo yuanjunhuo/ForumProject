@@ -51,16 +51,23 @@
       </span>
       <input v-model="password1" type="password" id="inputPassword" class="form-control" placeholder="设置密码" required />
     </div>
+    <security></security>
     <button v-on:click.prevent="identify" class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+  
+
   </form>
 </template>
 
 
 <script>
 import md5 from 'js-md5'
+import security from './Security'
 import axios from 'axios'//引入后，可以使用get，post(推荐)
 
 export default {
+  components:{
+    security,
+  },
   data(){
     return{
       inputCode:'',//动态储存用户输入的验证码
@@ -78,9 +85,16 @@ export default {
   },
   methods:{
     sendCode(){
+       axios.get("http://localhost:3000/users?phone="+this.user.phone).then((data)=>{
+        if(data.data==[]){
+          //无此用户，可以注册,然后发送验证码
+          
+        }else{//此用户已存在，请登录
+          
+        }
+      }); 
       this.code = Math.random().toString(10).slice(2,6)
-      console.log(this.user)
-     console.log("发送验证码")
+      
       // alert("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")
     // 这里验证验证码，如果成功再进行post
 
@@ -98,13 +112,15 @@ export default {
      this.post();
     },
     post(){
-      console.log("加密成功")
-      this.user.password = md5(this.password1);
-      console.log(this.user)
-       axios.post("http://jsonplaceholder.typicode.com/posts",this.user).then(function(data){//这里的地址是第三方测试地址。不能真实写入，但是有响应
-        console.log("post成功")
-        console.log(data)
-      })
+     
+    
+      // console.log("加密成功")
+      // this.user.password = md5(this.password1);
+      // console.log(this.user)
+      //  axios.post("http://localhost:3000/users",this.user).then(function(data){//这里的地址是第三方测试地址。不能真实写入，但是有响应
+      //   console.log("post成功")
+      //   console.log(data)
+      // })
     }
   }
 }
