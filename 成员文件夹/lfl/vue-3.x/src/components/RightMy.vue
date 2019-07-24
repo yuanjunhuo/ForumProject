@@ -9,22 +9,35 @@
         </router-link>
 
         <!-- 下面是头像 -->
-        <router-link to="/sign" tag="div">
+        <router-link v-bind:to="mineRouter" tag="div">
             <div class="img">
                 <div class="family">G</div>
-                <div class="name">Guest</div>
+                <div class="name">{{username}}</div>
             </div>
         </router-link>
     </div>
 </template>
 <script>
 export default {
-    data(){
-        return {
-            imgUrl:"",
-            userName:''
+    
+    computed:{
+        mineRouter(){
+            return this.$store.state.minerouter
+        },
+        username(){
+            return this.$store.state.username
         }
+
     },
+    created(){
+        //创建一开始就检测是否有cookie(username)，更改mine的路由，
+        if(this.$cookies.get("username")){
+            this.$store.commit('signIn',this.$cookies.get("username"));//改变为登录状态
+            console.log("登录状态");
+        }else{
+            console.log("非登录状态")
+        }
+    }
    
 }
 </script>
