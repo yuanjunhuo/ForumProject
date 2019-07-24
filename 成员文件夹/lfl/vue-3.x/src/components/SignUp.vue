@@ -70,7 +70,7 @@ export default {
   },
   data(){
     return{
-      inputCode:'',//动态储存用户输入的验证码
+      inputcode:'',//动态储存用户输入的验证码
       code:'',//随机生成的4位数验证码，目标验证码，用来比对inputCode
       password1:'',//临时明文
       user:{
@@ -110,10 +110,13 @@ export default {
     identify(){
       this.user.password=md5(this.password1);
       //验证码正确之后才能post（），inputCode==code时
-     this.post();
+      if(this.code==this.inputcode&&this.code!=''){
+        this.post();
+      }else{
+        this.$store.dispatch('alert',"您的手机号/验证码有错误")
+      }
     },
     post(){
-      
       axios.post("http://localhost:3000/users",this.user).then((data)=>{
         console.log(data);
          // 储存cookie（应该是确定正确注册之后才储存cookie，一次）
