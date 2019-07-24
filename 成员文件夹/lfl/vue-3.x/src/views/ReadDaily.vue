@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-about
+read
     <!-- <helloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>

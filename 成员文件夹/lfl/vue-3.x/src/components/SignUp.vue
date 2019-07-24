@@ -6,7 +6,7 @@
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
       </span>
       <input
-        v-model="user.name"
+        v-model="user.username"
         type="text"
         class="form-control"
         placeholder="你的昵称(2~5个字符)"
@@ -51,23 +51,30 @@
       </span>
       <input v-model="password1" type="password" id="inputPassword" class="form-control" placeholder="设置密码" required />
     </div>
+    <security></security>
     <button v-on:click.prevent="identify" class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+  
+
   </form>
 </template>
 
 
 <script>
 import md5 from 'js-md5'
+import security from './Security'
 import axios from 'axios'//引入后，可以使用get，post(推荐)
 
 export default {
+  components:{
+    security,
+  },
   data(){
     return{
-      inputCode:'',//动态储存用户输入的验证码
+      inputcode:'',//动态储存用户输入的验证码
       code:'',//随机生成的4位数验证码，目标验证码，用来比对inputCode
       password1:'',//临时明文
       user:{
-        name:"",
+        username:"",
         phone:"",
         password:""//加密后的密码
       }
@@ -78,9 +85,16 @@ export default {
   },
   methods:{
     sendCode(){
+       axios.get("http://localhost:3000/users?phone="+this.user.phone).then((data)=>{
+        if(data.data.length==0){//无此用户，可以注册,然后发送验证码
+          console.log("该手机号可以注册")
+
+        }else{//此用户已存在，请登录
+          console.log("有重复phone")
+          this.$store.dispatch('alert',"您的手机号已注册请登录")
+        }
+      }); 
       this.code = Math.random().toString(10).slice(2,6)
-      console.log(this.user)
-     console.log("发送验证码")
       // alert("http://v.juhe.cn/sms/send?mobile="+this.user.phone+"&tpl_id=174546&tpl_value=%23code%23%3D"+this.code+"&key=157e3d5c80e9a2af12aac8e5dfa8be5b")
     // 这里验证验证码，如果成功再进行post
 
@@ -94,17 +108,33 @@ export default {
     //   // })  //无需返回数据
     },
     identify(){
+      this.user.password=md5(this.password1);
       //验证码正确之后才能post（），inputCode==code时
-     this.post();
+      if(this.code==this.inputcode&&this.code!=''){
+        this.post();
+      }else{
+        this.$store.dispatch('alert',"您的手机号/验证码有错误")
+      }
     },
     post(){
-      console.log("加密成功")
-      this.user.password = md5(this.password1);
-      console.log(this.user)
-       axios.post("http://jsonplaceholder.typicode.com/posts",this.user).then(function(data){//这里的地址是第三方测试地址。不能真实写入，但是有响应
-        console.log("post成功")
-        console.log(data)
+      axios.post("http://localhost:3000/users",this.user).then((data)=>{
+        console.log(data);
+         // 储存cookie（应该是确定正确注册之后才储存cookie，一次）
+        this.$cookies.set('username',this.user.username,3600*24*10);
+        this.$store.commit('signIn',this.$cookies.get("username"));//改变为登录状态
+        console.log("post成功");
+        this.$router.push({path:'/mine'});
       })
+    
+  
+
+      // console.log("加密成功")
+      // this.user.password = md5(this.password1);
+      // console.log(this.user)
+      //  axios.post("http://localhost:3000/users",this.user).then(function(data){//这里的地址是第三方测试地址。不能真实写入，但是有响应
+      //   console.log("post成功")
+      //   console.log(data)
+      // })
     }
   }
 }

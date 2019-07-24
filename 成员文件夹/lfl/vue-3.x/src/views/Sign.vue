@@ -2,8 +2,8 @@
     <div class="sign">
       <div class="logo">Hello Daily</div>
       <div class="container">
-       
-       
+        <!-- 弹窗（密码错误，用户名（手机号）已存在）。中央管理，状态，内容 -->
+        <div v-if="this.$store.state.alert" class="alert alert-danger" role="alert">{{this.$store.state.alertcontext}}</div>
             <ul class="nav nav-pills">
               <li role="presentation">
                 <router-link to="/signin">登录</router-link>
@@ -12,6 +12,7 @@
                 <router-link to="/signup">注册</router-link>
               </li>
             </ul>
+
             <hr>
       
       
@@ -30,12 +31,24 @@ export default {
 .logo{
   font-size: 30px;
   position: absolute;
-  top:2%;
+  color: #2830a180;
+  top:0;
   left: 2%;
   
 }
+.alert{
+  width: 100%;
+  margin: 0 auto;
+  position: absolute;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px;
+  top:-40px;
+  left: 0;
+}
 
 .container{
+  position: relative;
   margin-top:100px; 
   /* border:1px solid black; */
   width: 40%;

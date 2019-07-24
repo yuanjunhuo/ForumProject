@@ -38,7 +38,6 @@ export default {
 .RightSide {
   width: 25%;
   height: 10000px;
-
   border-left: 2px rgba(71, 183, 132, 0.3) solid;
   position: fixed;
   right: 0;
